@@ -2,12 +2,11 @@
 # Signature tools
 #
 
-from bottle import Bottle, run, route, template, request, response, abort, static_file, default_app, redirect
+from bottle import route, template, request, abort
 
 from urllib.parse import urlparse
 from urllib.parse import unquote
 
-import util
 import sigutil
 import config
 
@@ -163,5 +162,3 @@ def sig_verify_url():
                     'pubKey': pub,
                     'record_strings': record_strings
                 })
-
-

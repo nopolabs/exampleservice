@@ -103,5 +103,3 @@ def get_domainconnect_json(domain):
 
   except:
     return None, None, 'Internal error'
-
-    

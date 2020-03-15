@@ -1,4 +1,4 @@
-from bottle import Bottle, run, route, template, request, response, abort, static_file, default_app, redirect
+from bottle import route, template, request, abort
 
 import config
 import urllib
@@ -179,4 +179,3 @@ def async_confirm():
          "dns_provider" : dns_provider,
          "status_code" : str(r.status_code)
      })
-

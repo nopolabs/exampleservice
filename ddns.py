@@ -5,7 +5,7 @@
 # displaying the code for the Dynamic DNS Demonstration application
 #
 
-from bottle import Bottle, run, route, template, request, response, abort, static_file, default_app, redirect
+from bottle import route, template, request, abort
 
 import config
 

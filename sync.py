@@ -1,6 +1,6 @@
-from bottle import Bottle, run, route, template, request, response, abort, static_file, default_app, redirect
+from bottle import route, template, request, abort
 
-import urllib.parse
+from urllib.parse import quote
 
 import config
 import util
@@ -50,29 +50,29 @@ def sync_post():
     dns_message_data = util.dns_message_data(message)
 		
     # Generate the query string for synchronous calls
-    qs = 'domain=' + urllib.parse.quote(domain, '') + '&RANDOMTEXT=' + urllib.parse.quote(dns_message_data) + '&IP=' + urllib.parse.quote(config.ip, '')
+    qs = 'domain=' + quote(domain, '') + '&RANDOMTEXT=' + quote(dns_message_data) + '&IP=' + quote(config.ip, '')
     if subdomain != '' and subdomain != None:
-        qs = qs + '&host=' + urllib.parse.quote(subdomain, '')
+        qs = qs + '&host=' + quote(subdomain, '')
 
     # Create the URL to configure template 1
     synchronousUrl1 = json_data['urlSyncUX'] + '/v2/domainTemplates/providers/' + config.provider + '/services/' + config.template1 + '/apply?' + qs
 	
     # Create the URL to configure template2. Template 2 needs a singature
     sig = sigutil.generate_sig(config.priv_key, qs)
-    synchronousSignedUrl2 = json_data['urlSyncUX'] + '/v2/domainTemplates/providers/' + config.provider + '/services/' + config.template2 + '/apply?' + qs + '&sig=' + urllib.parse.quote(sig, '') + '&key=_dck1'
+    synchronousSignedUrl2 = json_data['urlSyncUX'] + '/v2/domainTemplates/providers/' + config.provider + '/services/' + config.template2 + '/apply?' + qs + '&sig=' + quote(sig, '') + '&key=_dck1'
 
     # Generate the redirect uri
     redirect_uri = config.protocol + "://" + config.hosting_website + "/sync_confirm?domain=" + domain + "&subdomain=" + subdomain
 
     # Query string with the redirect
-    qsRedirect = qs + "&redirect_uri=" + urllib.parse.quote(redirect_uri, '')
+    qsRedirect = qs + "&redirect_uri=" + quote(redirect_uri, '')
 
     # Create the URL to configure template 1 with a redirect back
     synchronousRedirectUrl1 = json_data['urlSyncUX'] + '/v2/domainTemplates/providers/' + config.provider + '/services/' + config.template1 + '/apply?' + qsRedirect
 
     # Create the URL to configure template 2 with a redirect back. Template 2 needs a signature
     sigRedirect = sigutil.generate_sig(config.priv_key, qsRedirect)
-    synchronousSignedRedirectUrl2 = json_data['urlSyncUX'] + '/v2/domainTemplates/providers/' + config.provider + '/services/' + config.template2 + '/apply?' + qsRedirect + '&sig=' + urllib.parse.quote(sigRedirect, '') + '&key=_dck1'
+    synchronousSignedRedirectUrl2 = json_data['urlSyncUX'] + '/v2/domainTemplates/providers/' + config.provider + '/services/' + config.template2 + '/apply?' + qsRedirect + '&sig=' + quote(sigRedirect, '') + '&key=_dck1'
     
     return template('sync_post.tpl',
 		{
@@ -116,4 +116,3 @@ def sync_confirm():
                         'domain': domain,
                         'subdomain': subdomain
                     })
-

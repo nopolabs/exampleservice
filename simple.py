@@ -5,9 +5,9 @@
 # shows what the user would typically see
 #
 
-from bottle import Bottle, run, route, template, request, response, abort, static_file, default_app, redirect
+from bottle import route, template, request, abort
 
-import urllib.parse
+from urllib.parse import quote
 
 import config
 import util
@@ -51,9 +51,9 @@ def simple_post():
     dns_message_data = util.dns_message_data(message)
 		
     # Generate the query string for synchronous calls
-    qs = 'domain=' + urllib.parse.quote(domain, '') + '&RANDOMTEXT=' + urllib.parse.quote(dns_message_data) + '&IP=' + urllib.parse.quote(config.ip, '')
+    qs = 'domain=' + quote(domain, '') + '&RANDOMTEXT=' + quote(dns_message_data) + '&IP=' + quote(config.ip, '')
     if subdomain != '' and subdomain != None:
-        qs = qs + '&host=' + urllib.parse.quote(subdomain, '')
+        qs = qs + '&host=' + quote(subdomain, '')
 
     # Create the URL to configure template 1
     synchronousUrl1 = json_data['urlSyncUX'] + '/v2/domainTemplates/providers/' + config.provider + '/services/' + config.template1 + '/apply?' + qs
@@ -70,4 +70,3 @@ def simple_post():
                     'synchronousUrl1' : synchronousUrl1,
                     'fqdn': fqdn
                 })                    
-

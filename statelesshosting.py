@@ -1,14 +1,7 @@
-from bottle import Bottle, run, route, template, request, response, abort, static_file, default_app, redirect
+from bottle import run, route, template, request, abort, static_file, default_app, redirect
 
 import config
 import util
-import json
-
-from simple import *
-from sig import *
-from ddns import *
-from sync import *
-from async import *
 
 app = application = default_app()
 
@@ -49,4 +42,3 @@ def send_static(filename):
 # Runs the application for all hosts
 if __name__ == "__main__":
     run(host='0.0.0.0', port=81, debug=True)
-
